@@ -1,0 +1,116 @@
+NETID:  am2633
+
+Describe the contents of an IP packet and for each field describe the purpose it serves.
+
+Answer:
+The IPv4 header has following fields:
+Version (4 bits):-  This field  indicates the IP protocol version. For IPv4 its value is 4.
+Internet Header Length (IHL)(4 bits):-  This field specify the data offset. The  minimum value of this field is 5.
+Differentiated Services Code Point (DSCP)(6 bits):-  This field is used for differentiated services like Voice over IP.
+Explicit Congestion Notification (ECN)(2-bits):- This fields is used end-to-end for network congestion notifications.
+Total Length (16-bits):- Indicates entire packet size including header and data in bytes.
+Identification(16-bits):-  This field is primarily used for identifying fragmented IP packets.
+Flags(3-bits):- This field is used to control and identify fragments. bit0:reserved, bit1:don't fragment and  bit2 indicates more fragments.
+Fragment Offset (13-bits):- Specify the offset for the fragments
+Time To Live (TTL)(8-bits):- This fields limits datagrams lifetime in a transmission. If the value becomes the device will drop the packets.
+Protocol(8-bits):- Specify IP data gram protocol
+Header Checksum(16-bits):- Includes checksum value of the packets
+Source address(32-bits):- Indicates source Ip address.
+Destination address(32-bits):- Indicates destination Ip address
+Options:- Specify the advanced options for ipv4 used with IHL.
+
+Describe the general operation of the BGP protocol.
+
+Answer:
+BGP border gateway protocol is a routing protocol which is used to make routing decisions in a network.
+BGP is used  for routing within an Autonomous system.It does not use Interior Gateway Protocol (IGP) information for routing decisions, but only decides the route based on path, network policies and rule sets.  Routers on the boundary of an AS exchange information with the another AS to populate the routing information. The routing table contains a list of known routers, the addresses they can reach, and a cost metric associated with the path to each router so that the best available route is chosen. This information is used while making routing decision.
+
+Describe why the ethernet protocol necessitates a minimum packet size.
+
+Answer:
+The mechanism to share the ether CSMA/CD(Carrier sense multiple access/collision detection), states that the transmit nodes will listen to the collisions while transmitting its own frames. If it finishes its transmission without a collision , the transmission was considered successful. If the node transmit very small frame, it may be possible that it finish the transmission before other node  listen. This may result in collision as first node will no longer be listing. Therefore a minimum packet size (64 bytes) was decide so that all nodes will have sufficient time to hear while transmitting the frames.
+
+
+
+Describe how TCP reacts to congestion in the network.  Assume that
+congestion is brought on by BGP reconfiguring the path such that TCP
+packets now go through a bottleneck link of capacity B packets/second.
+Describe in detail what TCP will do when faced with this bottleneck.
+
+Answer:
+TCP is a congestion aware protocol therefore as soon as tcp observe some packet drop it will decreases its windows size to ensure lesser packet transmission. It will go in slow start mode where it reduces its window by half and then slowly increase it till it observe congestion.
+
+Describe TCP's behaviour when it is first getting started delivering data
+over a high latency, high-bandwidth channel such as a satellite link. Be
+sure to explain how TCP manages its window size during the initial
+connection setup.
+
+Answer:
+TCP windows size adjust according to the channel bandwidth. TCP starts slowly, in case of no congestion window size increases and more packets will be transmitted via the channel. Therefore, in case of high-bandwidth channel window size will increase from initial small value..
+
+
+On an ethernet segment, the ARP protocol is used to locate the ethernet
+address of a host whose IP address is known. On the Internet, DNS is
+used to locate the IP address of a host whose name is known. ARP and
+DNS are drastically different -- the former uses a broadcast mechanism
+while the latter implements a scalable, distributed database. Explain
+why DNS was designed the way it was, and not, for instance, based on
+a simple broadcast.
+
+Answer: 
+The arp protocol works within the same LAN however DNS protocol works across the LAN. If DNS decided to use broadcast  for  communication, the whole internet will be congested with DNS traffic.
+Moreover there are certain security concerns with broadcast traffic where everyone can listen the traffic and can spoof. This problem may be small in case of LAN but is quite big on internet.
+
+Describe the two means by which a DNS name, such as www.cnn.com, is
+resolved.
+
+Answer:
+DNS name server can be used to resolve query for www.cnn.com. Nameserver will provide and IP mapping for the above name by using either of the two ways:
+1. Recursive query:  In A recursive query, host request the query to the DNS server,the DNS server who received this query will do all the job of fetching the answer, and giving it back to you. During this process, the DNS server might also query other DNS server's in the intern.
+2. Iterative query: In an iterative query,host request the query to the DNS server, the DNS name server, will not go and fetch the complete DNS query answer for this query, but will give back a referral to other DNS server's, which might have the answer. The host then contact the referred name server for querying. 
+    
+What is a DNS local resolver?
+
+Answer:
+DNS local resolver is a hierarchical distributed naming system for computers,services, or any resource connected to the Internet or a private network. The purpose of DNS resolver is to resolve DNS query and provides name-server to IP mapping. DNS resolver provides Nameserver query 
+
+What purpose does the ACK # serve in TCP?
+
+Answer
+The purpose of ACK is to ensure the acknowledge receipt of a packet. The packet is considered successfully delivered to peer once the  host receive the ACK from the peer.
+
+
+What purpose does the destination port number serve in UDP?
+
+Answer:
+Destination port is used to identify specific application running on the specified  port. When the packet arrived on the host this information is used by transport layer to ensure packet delivery to the specified application.
+
+
+Why does UDP include a checksum? Wouldn't the end-to-end argument
+require that all checksums be performed at the application level, and
+hence argue that UDP and TCP elide such additional checksums in the
+network stack?
+
+Answer:>
+This is really not required as per end to end arguments.Moreover there is also not a strong reason to have UDP checksum. The only reason may be it is cheap to calculate the checksum that's why  UDP include this field. Once checksum field was included its very difficult to remove this field because of already existing deployment. 
+
+Imagine that a mail server on host A has just received a TCP/IP SYN
+packet destined for it. Describe everything that happens to this packet
+from the point of its reception by the network interface card to the
+point of its delivery to the mail server.
+
+Answer:>
+The ether layer or data link layer validates whether the packet has appropriate MAC address then it strips the packet ether header and forwarded the packet to ip layer. The Ip layer validates the dest Ip of the mail server specified in the packet and also perform checksum. After stripping the IP header the packet will be forward to transport layer. Transport layer identify the port on which the application is running and delivered the packet to the socket register with the application. In this case the socket will be registered with mail server.   
+
+In IPv6, why do routers not fragment packets. What does IPv6
+do instead of fragmentation?
+ The problem with fragmentation is 
+ 
+ Answer:>
+ There are certain security problems related to handling of fragmented packet. Moreover, routers has to allocate its resources till the time all the fragmented packets didn't come then only reassembly of packet can be done. This potentially can be used to exhaust routers resources, and can led to denial of service. Therefore ipv6 was designed to avoid such problem. In case of IPv6 instead of fragmenting, host uses path MTU discovery protocol to decides the greatest MTU  size with which the packet can  be sent out without the need of fragmenting the packet. However this requires allowing ICMP packets at router which is used for path mtu discovery.
+
+What is the difference between a web proxy and a vpn? When would it be advantageous 
+to use a proxy instead of a vpn?
+
+Answer:>
+A web proxy is a liaison between you and another computer. Therefore if you connected to internet via a proxy server your identity will be concealed and all your traffic for the outside world will seems to be coming to/from the proxy server. However a VPN is a virtual private network which allows you to connect to another through a secure encrypted channel. It will be advantageous to use proxy server if you want to quickly visit internet anonymously as no encryption is needed.

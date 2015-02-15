@@ -1,0 +1,11 @@
+mkfs
+create a 1022
+create b 20242
+create c 3022
+mkdir ab 
+cd ab
+create a 10
+create b 20
+create c 30
+cd /
+rm b
